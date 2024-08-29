@@ -33,6 +33,17 @@ class AddEmployee {
     getToastMessage(){
         return cy.get('.oxd-text--toast-message')
     }
+    getEmployeeId(){
+        return cy.get('label').contains("Employee Id").parent().siblings('div').find('input')
+    }
+
+    getSearchEmployeeButton(){
+        return cy.get('button[type="submit"]').contains('Search')
+    }
+
+    getTableCell(){
+        return cy.get('.orangehrm-employee-list').find("div[role='cell']")
+    }
 }
 
 export default AddEmployee;

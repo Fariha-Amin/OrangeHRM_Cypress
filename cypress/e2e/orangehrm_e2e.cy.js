@@ -5,6 +5,7 @@ import AddEmployee from '../pageObjects/addEmployee';
 describe('OrangeHRM End to End Testing', () => {
 
   let adminCredentials;
+  let lastUrl;
   const employeeDataFile = "employeeData.json";
 
   function generatePassword() {
@@ -40,6 +41,7 @@ describe('OrangeHRM End to End Testing', () => {
     const username = firstName + lastName;
     const fullName = firstName + " " + lastName;
     const password = generatePassword();
+  
 
     cy.visit('/');
     cy.waitTillElementIsVisible('h6');
@@ -52,18 +54,40 @@ describe('OrangeHRM End to End Testing', () => {
     addEmployee.getUsername().type(username);
     addEmployee.getPassword().type(password);
     addEmployee.getConfirmPassword().type(password);
+    addEmployee.getEmployeeId().invoke('val').then(employeeId=>{
+    cy.writeFile(`cypress/fixtures/${employeeDataFile}`, {
+      username,
+      password,
+      employeeId
+    });
+  })
     addEmployee.getSaveButton().click({ force: true });
     addEmployee.getToastMessage().should("have.text", "Successfully Saved");
     cy.waitTillElementIsVisible('h6');
     cy.get('h6').should("contain.text", fullName);
 
-    // Save employee data to a file
-    cy.writeFile(`cypress/fixtures/${employeeDataFile}`, {
-      username,
-      password
-    });
   });
 
+  it('Search by Employee ID', () => {
+    const mainMenu = new MainMenu();
+    const addEmployee = new AddEmployee();
+    cy.visit(lastUrl)
+    mainMenu.getPIM().click()
+    cy.waitTillElementIsVisible('h6');
+    cy.get('h6').should("contain.text", 'PIM');
+    
+    cy.fixture(employeeDataFile).then((employee)=>{
+    addEmployee.getEmployeeId().type(employee.employeeId)
+    addEmployee.getSearchEmployeeButton().click({ force: true })
+    addEmployee.getTableCell().contains(employee.employeeId).should('be.visible')
+  })
+})
+
+  afterEach(() => {
+    cy.url().then((url) => {
+      lastUrl = url;
+    })
+  })
   after(() => {
     // Cleanup code if needed
   });
