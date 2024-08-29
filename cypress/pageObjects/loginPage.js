@@ -12,5 +12,5 @@ class LoginPage {
         return cy.get("[type='submit']");
     }
 }
-cy.get(".oxd-main-menu").find('span').contains('PIM')
+
 export default LoginPage;
