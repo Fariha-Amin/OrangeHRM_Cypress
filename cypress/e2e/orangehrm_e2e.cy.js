@@ -9,6 +9,7 @@ describe('OrangeHRM End to End Testing', () => {
   let adminCredentials;
   let lastUrl;
   const employeeDataFile = "employeeData.json";
+  const credentialsFile = "values.json";
 
   function generatePassword() {
     const upperCase = faker.internet.password(3, false, /[A-Z]/);
@@ -104,6 +105,10 @@ describe('OrangeHRM End to End Testing', () => {
       const normalizedText = text.replace(/\s+/g, ' ').trim(); 
       expect(normalizedText).to.eq(fullName);
     });
+    cy.writeFile(`cypress/fixtures/${credentialsFile}`, {
+      username,
+      password
+    });
 
     })
 
@@ -117,6 +122,11 @@ describe('OrangeHRM End to End Testing', () => {
     userMenu.getUserMenu().click({force:true})
     userMenu.getLogoutOption().click({force:true})
        
+  })
+
+  it('Login with New Employee Credentials',()=>{
+
+      cy.visit('/')
   })
 
   afterEach(() => {

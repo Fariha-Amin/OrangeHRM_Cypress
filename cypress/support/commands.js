@@ -7,6 +7,7 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 
 Cypress.Commands.add('login', (values) => {
 
+  cy.log(values)
   const loginPage = new LoginPage()
   loginPage.getLoginUsername().type(values.adminUsername);
   loginPage.getLoginPassword().type(values.adminPassword);
