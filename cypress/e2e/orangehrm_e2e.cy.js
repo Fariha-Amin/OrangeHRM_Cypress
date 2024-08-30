@@ -2,6 +2,7 @@ const { faker } = require('@faker-js/faker');
 import MainMenu from '../pageObjects/mainMenu';
 import AddEmployee from '../pageObjects/addEmployee';
 import Directory from '../pageObjects/directory';
+import UserMenu from '../pageObjects/userMenu';
 
 describe('OrangeHRM End to End Testing', () => {
 
@@ -107,6 +108,15 @@ describe('OrangeHRM End to End Testing', () => {
     })
 
     
+  })
+
+  it('Logout', () => {
+
+    cy.visit(lastUrl)
+    const userMenu = new UserMenu()
+    userMenu.getUserMenu().click({force:true})
+    userMenu.getLogoutOption().click({force:true})
+       
   })
 
   afterEach(() => {
