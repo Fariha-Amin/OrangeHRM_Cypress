@@ -144,8 +144,20 @@ describe('OrangeHRM End to End Testing', () => {
     const userMenu = new UserMenu()
     cy.waitTillElementIsVisible('h6');
     cy.get('h6').should("have.text", "Dashboard");
-    userMenu.getUserNameText().should('contain.text',fullName)
-    
+    userMenu.getUserNameText().should('contain.text', fullName)
+
+  });
+
+  it('Update User Info', () => {
+
+    cy.visit(lastUrl);
+    const mainMenu = new MainMenu();
+    mainMenu.getMyInfo().click({ force: true })
+    cy.waitTillElementIsVisible('h6');
+    cy.get('h6').should("contain.text", fullName);
+
+
+
   });
 
 
