@@ -113,24 +113,24 @@ describe('OrangeHRM End to End Testing', () => {
     cy.get('h6').should("contain.text", 'Directory');
 
     cy.fixture(employeeDataFile).then((employee) => {
-    directory.getEmployeeNameField().type(firstName)
-    directory.getAutoCompleteDropdown().click()
-    directory.getSearchButton().click()
-    directory.getEmployeeCardHeader()
-    .invoke('text')
-    .then((text) => {
-      const normalizedText = text.replace(/\s+/g, ' ').trim(); 
-      expect(normalizedText).to.eq(fullName);
-    });
+      directory.getEmployeeNameField().type(firstName)
+      directory.getAutoCompleteDropdown().click()
+      directory.getSearchButton().click()
+      directory.getEmployeeCardHeader()
+        .invoke('text')
+        .then((text) => {
+          const normalizedText = text.replace(/\s+/g, ' ').trim();
+          expect(normalizedText).to.eq(fullName);
+        });
 
     })
 
-    
+
   })
 
   it('Logout', () => {
 
-    cy.visit('/')
+    cy.visit(lastUrl)
     const userMenu = new UserMenu()
     userMenu.getUserMenu().click({ force: true })
     userMenu.getLogoutOption().click({ force: true })
@@ -165,6 +165,16 @@ describe('OrangeHRM End to End Testing', () => {
 
   });
 
+  it('Logout as New Employee', () => {
+    cy.visit(lastUrl)
+    const userMenu = new UserMenu()
+    userMenu.getUserMenu().click({ force: true })
+    userMenu.getLogoutOption().click({ force: true })
+    adminUser = false;
+    cy.clearCookies();
+    cy.clearLocalStorage();
+  })
+
 
 
   afterEach(() => {
@@ -173,6 +183,8 @@ describe('OrangeHRM End to End Testing', () => {
     })
   })
   after(() => {
-    // Cleanup code if needed
+
+    // clearing employeeData object after all tests are completed
+    cy.writeFile(`cypress/fixtures/${employeeDataFile}`, {});
   });
 });
