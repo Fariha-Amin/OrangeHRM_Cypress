@@ -9,8 +9,8 @@ Cypress.Commands.add('login', (values) => {
 
   cy.log(values)
   const loginPage = new LoginPage()
-  loginPage.getLoginUsername().type(values.adminUsername);
-  loginPage.getLoginPassword().type(values.adminPassword);
+  loginPage.getLoginUsername().type(values.username);
+  loginPage.getLoginPassword().type(values.password);
   loginPage.getLoginButton().click({ force: true });
 
 

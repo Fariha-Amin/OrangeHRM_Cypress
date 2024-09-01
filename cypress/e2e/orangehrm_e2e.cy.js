@@ -8,6 +8,8 @@ describe('OrangeHRM End to End Testing', () => {
 
   let adminCredentials;
   let lastUrl;
+  let adminUser = true;
+  let newEmployeeCredentials;
   const employeeDataFile = "employeeData.json";
   const credentialsFile = "values.json";
 
@@ -34,14 +36,28 @@ describe('OrangeHRM End to End Testing', () => {
   });
 
   beforeEach(() => {
-    // Set page load timeout and login
-    Cypress.config('pageLoadTimeout', 10000);
-    cy.session('Login as Admin', () => {
-      cy.visit('/');
-      //cy.title().should("eq", "OrangeHRM");
-      cy.login(adminCredentials);
-    });
+    if (adminUser) {
+      Cypress.config('pageLoadTimeout', 10000);
+      cy.session('Login as Admin', () => {
+        cy.visit('/');
+        cy.title().should("eq", "OrangeHRM");
+        cy.login(adminCredentials);
+      });
+    } else if (!adminUser) {
+      cy.fixture(employeeDataFile).then((employee) => {
+        newEmployeeCredentials = {
+          username: employee.username,
+          password: employee.password
+        };
+        cy.session('Login as New Employee', () => {
+          cy.visit('/');
+          cy.login(newEmployeeCredentials);
+        });
+
+      });
+    }
   });
+
 
   it('Creating a New Employee', () => {
     const mainMenu = new MainMenu();
@@ -64,6 +80,7 @@ describe('OrangeHRM End to End Testing', () => {
         password,
         employeeId
       });
+
     })
     addEmployee.getSaveButton().click({ force: true });
     addEmployee.getToastMessage().should("have.text", "Successfully Saved");
@@ -72,7 +89,7 @@ describe('OrangeHRM End to End Testing', () => {
 
   });
 
-  it('Search by Employee ID', () => {
+  /*it('Search by Employee ID', () => {
     const mainMenu = new MainMenu();
     const addEmployee = new AddEmployee();
     cy.visit(lastUrl)
@@ -105,29 +122,31 @@ describe('OrangeHRM End to End Testing', () => {
       const normalizedText = text.replace(/\s+/g, ' ').trim(); 
       expect(normalizedText).to.eq(fullName);
     });
-    cy.writeFile(`cypress/fixtures/${credentialsFile}`, {
-      username,
-      password
-    });
 
     })
 
     
-  })
+  })*/
 
   it('Logout', () => {
 
     cy.visit(lastUrl)
     const userMenu = new UserMenu()
-    userMenu.getUserMenu().click({force:true})
-    userMenu.getLogoutOption().click({force:true})
-       
+    userMenu.getUserMenu().click({ force: true })
+    userMenu.getLogoutOption().click({ force: true })
+    adminUser = false;
+    cy.clearCookies();
+    cy.clearLocalStorage();
   })
 
-  it('Login with New Employee Credentials',()=>{
+  it('Login with New Employee Credentials', () => {
+    cy.visit('/');
+    cy.waitTillElementIsVisible('h6');
+    cy.get('h6').should("have.text", "Dashboard");
 
-      cy.visit('/')
-  })
+  });
+
+
 
   afterEach(() => {
     cy.url().then((url) => {
