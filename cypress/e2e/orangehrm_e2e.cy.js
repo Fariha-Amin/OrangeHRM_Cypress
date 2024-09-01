@@ -11,7 +11,7 @@ describe('OrangeHRM End to End Testing', () => {
   let adminUser = true;
   let newEmployeeCredentials;
   const employeeDataFile = "employeeData.json";
-  const credentialsFile = "values.json";
+
 
   function generatePassword() {
     const upperCase = faker.internet.password(3, false, /[A-Z]/);
@@ -29,7 +29,7 @@ describe('OrangeHRM End to End Testing', () => {
 
 
   before(() => {
-    // Load admin credentials
+
     cy.fixture("values").then((loadedValues) => {
       adminCredentials = loadedValues;
     });
@@ -171,6 +171,7 @@ describe('OrangeHRM End to End Testing', () => {
     userMenu.getUserMenu().click({ force: true })
     userMenu.getLogoutOption().click({ force: true })
     adminUser = false;
+    //clearing admin session
     cy.clearCookies();
     cy.clearLocalStorage();
   })
