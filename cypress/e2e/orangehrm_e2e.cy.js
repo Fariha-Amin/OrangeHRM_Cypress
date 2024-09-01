@@ -141,9 +141,11 @@ describe('OrangeHRM End to End Testing', () => {
 
   it('Login with New Employee Credentials', () => {
     cy.visit('/');
+    const userMenu = new UserMenu()
     cy.waitTillElementIsVisible('h6');
     cy.get('h6').should("have.text", "Dashboard");
-
+    userMenu.getUserNameText().should('contain.text',fullName)
+    
   });
 
 
