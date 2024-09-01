@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 import LoginPage from "../pageObjects/loginpage";
 
+
 Cypress.on('uncaught:exception', (err, runnable) => {
   return false;
 });

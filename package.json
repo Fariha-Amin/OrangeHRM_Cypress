@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "recordDashboard": "npx cypress run --record --key 556dd6ee-7d40-4048-b558-99a1ef7a6c09"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +14,9 @@
     "@faker-js/faker": "^8.4.1",
     "cypress": "^13.13.3",
     "cypress-mochawesome-reporter": "^3.8.2"
+  },
+  "dependencies": {
+    "-": "^0.0.1",
+    "save-dev": "^0.0.1-security"
   }
 }

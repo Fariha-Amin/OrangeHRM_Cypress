@@ -2,6 +2,7 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   chromeWebSecurity:false,
+  projectId: "urf2fr",
   reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {
     charts: true,
@@ -9,7 +10,8 @@ module.exports = defineConfig({
     embeddedScreenshots: true,
     inlineAssets: true,
     saveAllAttempts: false,
-    reportDir: 'cypress/reports' 
+    html: true,
+    reportDir: 'cypress/reports'
   },
   
   e2e: {
