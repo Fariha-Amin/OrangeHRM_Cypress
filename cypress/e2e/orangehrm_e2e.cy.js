@@ -3,7 +3,7 @@ import MainMenu from '../pageObjects/mainMenu';
 import AddEmployee from '../pageObjects/addEmployee';
 import Directory from '../pageObjects/directory';
 import UserMenu from '../pageObjects/userMenu';
-
+import MyInfo from '../pageObjects/myInfoPage';
 describe('OrangeHRM End to End Testing', () => {
 
   let adminCredentials;
@@ -89,7 +89,7 @@ describe('OrangeHRM End to End Testing', () => {
 
   });
 
-  /*it('Search by Employee ID', () => {
+  it('Search by Employee ID', () => {
     const mainMenu = new MainMenu();
     const addEmployee = new AddEmployee();
     cy.visit(lastUrl)
@@ -126,11 +126,11 @@ describe('OrangeHRM End to End Testing', () => {
     })
 
     
-  })*/
+  })
 
   it('Logout', () => {
 
-    cy.visit(lastUrl)
+    cy.visit('/')
     const userMenu = new UserMenu()
     userMenu.getUserMenu().click({ force: true })
     userMenu.getLogoutOption().click({ force: true })
@@ -150,13 +150,18 @@ describe('OrangeHRM End to End Testing', () => {
 
   it('Update User Info', () => {
 
+    const myInfo = new MyInfo();
     cy.visit(lastUrl);
     const mainMenu = new MainMenu();
     mainMenu.getMyInfo().click({ force: true })
     cy.waitTillElementIsVisible('h6');
     cy.get('h6').should("contain.text", fullName);
-
-
+    myInfo.getFemaleGenderRadioButton().scrollIntoView().click({ force: true })
+    myInfo.getPersonalDetailsSaveButton().click({ force: true })
+    myInfo.getBloodGroupDropdown().scrollIntoView().click({ force: true })
+    myInfo.SelectBloodGroup('O+').click({ force: true })
+    myInfo.getCustomDetailsSaveButton().click({ force: true })
+    myInfo.getSuccessToastMessage().should("have.text", "Successfully Saved");
 
   });
 
